@@ -56,7 +56,7 @@ class TicketOfficeTest extends TestCase
         // Expect
         $this->trainDataProvider->markSeatsAsReserved(
             $this->trainId,
-            [new ReservedSeat('A1'), new ReservedSeat('A2'), new ReservedSeat('A3')]
+            $this->threeReservedSeats()
         )->shouldBeCalled();
 
         // When
@@ -67,7 +67,7 @@ class TicketOfficeTest extends TestCase
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
         $this->assertEquals($this->bookingReference, $reservationConfirmation->getBookingReference());
         $this->assertEquals(
-            [new ReservedSeat('A1'), new ReservedSeat('A2'), new ReservedSeat('A3')],
+            $this->threeReservedSeats(),
             $reservationConfirmation->getReservedSeats()
         );
     }
@@ -83,6 +83,24 @@ class TicketOfficeTest extends TestCase
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
         $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 1));
+
+        // Then
+        $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
+        $this->assertEmpty($reservationConfirmation->getBookingReference()->getReference());
+        $this->assertEmpty($reservationConfirmation->getReservedSeats());
+    }
+
+    public function testShouldNotExceedOverallTrainCapacityOf70Percent()
+    {
+        // Given
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn($this->trainWith1CoachAnd10AvailableSeats());
+
+        // Expect
+        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
+
+        // When
+        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 8));
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -111,13 +129,19 @@ class TicketOfficeTest extends TestCase
     private function trainWithNoAvailableSeat()
     {
         return new TrainTopology([
-            new Coach([
-                new ReservedSeat('A1'),
-                new ReservedSeat('A2'),
-                new ReservedSeat('A3'),
-                new ReservedSeat('A4'),
-                new ReservedSeat('A5'),
-            ]),
+            new Coach($this->threeReservedSeats()),
         ]);
+    }
+
+    /**
+     * @return array
+     */
+    private function threeReservedSeats(): array
+    {
+        return [
+            new ReservedSeat('A1', $this->bookingReference),
+            new ReservedSeat('A2', $this->bookingReference),
+            new ReservedSeat('A3', $this->bookingReference),
+        ];
     }
 }

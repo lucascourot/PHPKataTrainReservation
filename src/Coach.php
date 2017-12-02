@@ -21,4 +21,17 @@ final class Coach
     {
         return $this->seats;
     }
+
+    public function getNumberOfAlreadyReservedSeats(): int
+    {
+        $numberOfAlreadyReservedSeats = 0;
+
+        foreach ($this->getSeats() as $seat) {
+            if ($seat instanceof ReservedSeat) {
+                ++$numberOfAlreadyReservedSeats;
+            }
+        }
+
+        return $numberOfAlreadyReservedSeats;
+    }
 }

@@ -9,8 +9,8 @@ final class AvailableSeat
         $this->reference = $reference;
     }
 
-    public function reserve(): ReservedSeat
+    public function reserveWith(BookingReference $bookingReference): ReservedSeat
     {
-        return new ReservedSeat($this->reference);
+        return new ReservedSeat($this->reference, $bookingReference);
     }
 }
