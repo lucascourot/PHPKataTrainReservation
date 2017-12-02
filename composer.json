@@ -1,0 +1,33 @@
+{
+  "name": "lucascourot/kata-train-reservation",
+  "description": "Kata: reserve train seats",
+  "type": "project",
+  "require": {
+    "php": "^7.1"
+  },
+  "require-dev": {
+    "friendsofphp/php-cs-fixer": "^2.8",
+    "phpunit/phpunit": "^6.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "TrainReservation\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "TrainReservationTest\\": "tests/"
+    }
+  },
+  "config": {
+    "platform": {
+      "php": "7.1"
+    },
+    "preferred-install": {
+      "*": "dist"
+    },
+    "bin-dir": "bin/",
+    "sort-packages": true
+  },
+  "license": "MIT"
+}

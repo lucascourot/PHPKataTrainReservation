@@ -19,3 +19,22 @@ start_train_data: ## Start train data service
 .PHONY: guiding_test
 guiding_test: ## Launch the guiding test
 	python3 -m unittest _services/guiding_test.py
+
+# Tests
+
+.PHONY: test
+test: ## Run unit tests
+	@test -f bin/phpunit || echo "cannot run unit tests (needs phpunit/phpunit)"
+	php bin/phpunit tests
+
+# Coding Style
+
+.PHONY: cs cs-fix cs-ci
+cs: ## Check code style
+	./bin/php-cs-fixer fix --dry-run --stop-on-violation --diff
+
+cs-fix: ## Fix code style
+	./bin/php-cs-fixer fix
+
+cs-ci: ## Run Continuous Integration code style check
+	./bin/php-cs-fixer fix --dry-run --using-cache=no --verbose
