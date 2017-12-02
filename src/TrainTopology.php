@@ -51,7 +51,13 @@ final class TrainTopology
 
         foreach ($this->coaches as $coach) {
             foreach ($coach->getSeats() as $seat) {
+                $numberOfSeatsToReserveInCoach = 0;
+
                 if ($seat instanceof AvailableSeat) {
+                    if ($coach->exceedsIdealCapacityWith(++$numberOfSeatsToReserveInCoach)) {
+                        continue;
+                    }
+
                     $optionOfReservation->markSeatAsResearved($seat);
 
                     if ($optionOfReservation->isSatisfied()) {

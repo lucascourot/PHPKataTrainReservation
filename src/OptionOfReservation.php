@@ -34,6 +34,10 @@ final class OptionOfReservation
      */
     public function reserveSeatsWith(BookingReference $bookingReference): array
     {
+        if (!$this->isSatisfied()) {
+            throw new \LogicException('Cannot reserve seats, the option of reservation has not been satisfied.');
+        }
+
         $reservedSeats = [];
 
         foreach ($this->seatsToReserve as $availableSeat) {

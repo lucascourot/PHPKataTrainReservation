@@ -56,7 +56,11 @@ class TicketOfficeTest extends TestCase
         // Expect
         $this->trainDataProvider->markSeatsAsReserved(
             $this->trainId,
-            $this->threeReservedSeats()
+            [
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+            ]
         )->shouldBeCalled();
 
         // When
@@ -67,7 +71,11 @@ class TicketOfficeTest extends TestCase
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
         $this->assertEquals($this->bookingReference, $reservationConfirmation->getBookingReference());
         $this->assertEquals(
-            $this->threeReservedSeats(),
+            [
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+            ],
             $reservationConfirmation->getReservedSeats()
         );
     }
@@ -108,6 +116,54 @@ class TicketOfficeTest extends TestCase
         $this->assertEmpty($reservationConfirmation->getReservedSeats());
     }
 
+    public function testShouldIdeallyNotExceedIndividualCoachCapacityOf70Percent()
+    {
+        // Given
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+                new ReservedSeat('A4', $this->bookingReference),
+                new ReservedSeat('A5', $this->bookingReference),
+                new ReservedSeat('A6', $this->bookingReference),
+                new ReservedSeat('A7', $this->bookingReference),
+                new AvailableSeat('A8'),
+                new AvailableSeat('A9'),
+                new AvailableSeat('A10'),
+            ]),
+            new Coach([
+                new ReservedSeat('B1', $this->bookingReference),
+                new ReservedSeat('B2', $this->bookingReference),
+                new ReservedSeat('B3', $this->bookingReference),
+                new ReservedSeat('B4', $this->bookingReference),
+                new ReservedSeat('B5', $this->bookingReference),
+                new AvailableSeat('B6'),
+                new AvailableSeat('B7'),
+                new AvailableSeat('B8'),
+                new AvailableSeat('B9'),
+                new AvailableSeat('B10'),
+            ]),
+        ]));
+
+        // Expect
+        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldBeCalled();
+
+        // When
+        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 1));
+
+        // Then
+        $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
+        $this->assertEquals($this->bookingReference, $reservationConfirmation->getBookingReference());
+        $this->assertEquals(
+            [
+                new ReservedSeat('B6', $this->bookingReference),
+            ],
+            $reservationConfirmation->getReservedSeats()
+        );
+    }
+
     private function trainWith1CoachAnd10AvailableSeats()
     {
         return new TrainTopology([
@@ -129,19 +185,11 @@ class TicketOfficeTest extends TestCase
     private function trainWithNoAvailableSeat()
     {
         return new TrainTopology([
-            new Coach($this->threeReservedSeats()),
+            new Coach([
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+            ]),
         ]);
-    }
-
-    /**
-     * @return array
-     */
-    private function threeReservedSeats(): array
-    {
-        return [
-            new ReservedSeat('A1', $this->bookingReference),
-            new ReservedSeat('A2', $this->bookingReference),
-            new ReservedSeat('A3', $this->bookingReference),
-        ];
     }
 }

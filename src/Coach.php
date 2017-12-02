@@ -4,6 +4,8 @@ namespace TrainReservation;
 
 final class Coach
 {
+    private const IDEAL_CAPACITY_PERCENTAGE = 70;
+
     /**
      * @var Seat[]
      */
@@ -33,5 +35,12 @@ final class Coach
         }
 
         return $numberOfAlreadyReservedSeats;
+    }
+
+    public function exceedsIdealCapacityWith(int $numberOfSeatsToReserve): bool
+    {
+        $reservedSeats = $this->getNumberOfAlreadyReservedSeats() + $numberOfSeatsToReserve;
+
+        return $reservedSeats > count($this->getSeats()) * self::IDEAL_CAPACITY_PERCENTAGE / 100;
     }
 }

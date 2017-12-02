@@ -4,7 +4,9 @@ namespace TrainReservationTest;
 
 use PHPUnit\Framework\TestCase;
 use TrainReservation\AvailableSeat;
+use TrainReservation\BookingReference;
 use TrainReservation\Coach;
+use TrainReservation\ReservedSeat;
 use TrainReservation\TrainTopology;
 
 class TrainTopologyTest extends TestCase
@@ -49,6 +51,28 @@ class TrainTopologyTest extends TestCase
 
         // When
         $optionOfReservation = $trainTopology->tryToReserveSeats(8);
+
+        // Then
+        $this->assertFalse($optionOfReservation->isSatisfied());
+    }
+
+    public function testShouldNotReserveSeatsIfNotSuccessfulReservation()
+    {
+        // Given
+        $trainTopology = new TrainTopology([
+            new Coach([
+                new AvailableSeat('A1'),
+                new AvailableSeat('A2'),
+            ]),
+        ]);
+        $bookingReference = new BookingReference('75bcd15');
+
+        // Expect
+        $this->expectException(\LogicException::class);
+
+        // When
+        $optionOfReservation = $trainTopology->tryToReserveSeats(5);
+        $optionOfReservation->reserveSeatsWith($bookingReference);
 
         // Then
         $this->assertFalse($optionOfReservation->isSatisfied());
