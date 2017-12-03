@@ -43,4 +43,20 @@ final class Coach
 
         return $reservedSeats > count($this->getSeats()) * self::IDEAL_CAPACITY_PERCENTAGE / 100;
     }
+
+    /**
+     * @return AvailableSeat[]
+     */
+    public function getAvailableSeatsFor(int $numberOfSeatsToReserve): array
+    {
+        $availableSeats = [];
+
+        foreach ($this->seats as $seat) {
+            if ($seat instanceof AvailableSeat) {
+                $availableSeats[] = $seat;
+            }
+        }
+
+        return array_slice($availableSeats, 0, $numberOfSeatsToReserve);
+    }
 }

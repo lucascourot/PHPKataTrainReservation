@@ -19,9 +19,23 @@ final class OptionOfReservation
         $this->numberOfSeatsToReserve = $numberOfSeatsToReserve;
     }
 
-    public function markSeatAsResearved(AvailableSeat $availableSeat): void
+    public function markSeatsAsReserved(array $seats): void
     {
-        $this->seatsToReserve[] = $availableSeat;
+        if ($this->isSatisfied()) {
+            return;
+        }
+
+        foreach ($seats as $availableSeat) {
+            if (!$availableSeat instanceof AvailableSeat) {
+                continue;
+            }
+
+            $this->seatsToReserve[] = $availableSeat;
+
+            if ($this->isSatisfied()) {
+                break;
+            }
+        }
     }
 
     public function isSatisfied(): bool

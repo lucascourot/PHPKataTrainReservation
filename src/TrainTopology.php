@@ -49,36 +49,47 @@ final class TrainTopology
             return $optionOfReservation;
         }
 
-        foreach ($this->coaches as $coach) {
-            foreach ($coach->getSeats() as $seat) {
-                $numberOfSeatsToReserveInCoach = 0;
+        if ($coach = $this->findACoachWithIdealCapacityFor($numberOfSeatsToReserve)) {
+            $optionOfReservation->markSeatsAsReserved($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
 
-                if ($seat instanceof AvailableSeat) {
-                    if ($coach->exceedsIdealCapacityWith(++$numberOfSeatsToReserveInCoach)) {
-                        continue;
-                    }
+            return $optionOfReservation;
+        }
 
-                    $optionOfReservation->markSeatAsResearved($seat);
+        if ($coach = $this->findACoachThatCanBreakIdealCapacityFor($numberOfSeatsToReserve)) {
+            $optionOfReservation->markSeatsAsReserved($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
 
-                    if ($optionOfReservation->isSatisfied()) {
-                        break 2;
-                    }
-                }
-            }
+            return $optionOfReservation;
         }
 
         return $optionOfReservation;
     }
 
-    /**
-     * @param int $numberOfSeatsToReserve
-     *
-     * @return bool
-     */
     private function trainCapacityExceededWith(int $numberOfSeatsToReserve): bool
     {
         $reservedSeats = $this->overallNumberOfAlreadyReservedSeats + $numberOfSeatsToReserve;
 
         return $reservedSeats > $this->overallNumberOfAllSeats * self::OVERALL_TRAIN_CAPACITY_PERCENTAGE / 100;
+    }
+
+    private function findACoachWithIdealCapacityFor(int $numberOfSeatsToReserve): ?Coach
+    {
+        foreach ($this->coaches as $coach) {
+            if (!$coach->exceedsIdealCapacityWith($numberOfSeatsToReserve)) {
+                return $coach;
+            }
+        }
+
+        return null;
+    }
+
+    private function findACoachThatCanBreakIdealCapacityFor(int $numberOfSeatsToReserve): ?Coach
+    {
+        foreach ($this->coaches as $coach) {
+            if (count($coach->getAvailableSeatsFor($numberOfSeatsToReserve)) === $numberOfSeatsToReserve) {
+                return $coach;
+            }
+        }
+
+        return null;
     }
 }

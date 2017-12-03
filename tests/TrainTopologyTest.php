@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use TrainReservation\AvailableSeat;
 use TrainReservation\BookingReference;
 use TrainReservation\Coach;
-use TrainReservation\ReservedSeat;
 use TrainReservation\TrainTopology;
 
 class TrainTopologyTest extends TestCase
