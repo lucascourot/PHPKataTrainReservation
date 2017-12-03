@@ -51,7 +51,20 @@ class TicketOfficeTest extends TestCase
     public function testShouldReserveSeatsWhenTrainIsEmpty()
     {
         // Given
-        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn($this->trainWith1CoachAnd10AvailableSeats());
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new AvailableSeat('A1'),
+                new AvailableSeat('A2'),
+                new AvailableSeat('A3'),
+                new AvailableSeat('A4'),
+                new AvailableSeat('A5'),
+                new AvailableSeat('A6'),
+                new AvailableSeat('A7'),
+                new AvailableSeat('A8'),
+                new AvailableSeat('A9'),
+                new AvailableSeat('A10'),
+            ]),
+        ]));
 
         // Expect
         $this->trainDataProvider->markSeatsAsReserved(
@@ -80,10 +93,40 @@ class TicketOfficeTest extends TestCase
         );
     }
 
+    public function testShouldOnlyReserveOneOrMoreSeats()
+    {
+        // Given
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new AvailableSeat('A1'),
+                new AvailableSeat('A2'),
+            ]),
+        ]));
+
+        // Expect
+        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->expectException(\LogicException::class);
+
+        // When
+        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 0));
+
+        // Then
+        $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
+        $this->assertEmpty($reservationConfirmation->getBookingReference()->getReference());
+        $this->assertEmpty($reservationConfirmation->getReservedSeats());
+    }
+
     public function testShouldNotReserveSeatsWhenTrainIsFull()
     {
         // Given
-        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn($this->trainWithNoAvailableSeat());
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+            ]),
+        ]));
 
         // Expect
         $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
@@ -101,7 +144,20 @@ class TicketOfficeTest extends TestCase
     public function testShouldNotExceedOverallTrainCapacityOf70Percent()
     {
         // Given
-        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn($this->trainWith1CoachAnd10AvailableSeats());
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new AvailableSeat('A1'),
+                new AvailableSeat('A2'),
+                new AvailableSeat('A3'),
+                new AvailableSeat('A4'),
+                new AvailableSeat('A5'),
+                new AvailableSeat('A6'),
+                new AvailableSeat('A7'),
+                new AvailableSeat('A8'),
+                new AvailableSeat('A9'),
+                new AvailableSeat('A10'),
+            ]),
+        ]));
 
         // Expect
         $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
@@ -260,34 +316,5 @@ class TicketOfficeTest extends TestCase
             ],
             $reservationConfirmation->getReservedSeats()
         );
-    }
-
-    private function trainWith1CoachAnd10AvailableSeats()
-    {
-        return new TrainTopology([
-            new Coach([
-                new AvailableSeat('A1'),
-                new AvailableSeat('A2'),
-                new AvailableSeat('A3'),
-                new AvailableSeat('A4'),
-                new AvailableSeat('A5'),
-                new AvailableSeat('A6'),
-                new AvailableSeat('A7'),
-                new AvailableSeat('A8'),
-                new AvailableSeat('A9'),
-                new AvailableSeat('A10'),
-            ]),
-        ]);
-    }
-
-    private function trainWithNoAvailableSeat()
-    {
-        return new TrainTopology([
-            new Coach([
-                new ReservedSeat('A1', $this->bookingReference),
-                new ReservedSeat('A2', $this->bookingReference),
-                new ReservedSeat('A3', $this->bookingReference),
-            ]),
-        ]);
     }
 }

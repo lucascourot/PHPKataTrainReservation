@@ -1,0 +1,23 @@
+language: php
+
+php:
+    - 7.1
+
+install:
+    - composer install
+    - sudo apt-get -y install python3-pip
+    - sudo pip3 install -U setuptools
+    - sudo pip3 install -U virtualenvwrapper
+    - sudo pip3 install cherrypy
+
+before_script:
+    - make services -j2 > /dev/null 2>&1 &
+    - make start > /dev/null 2>&1 &
+
+script:
+    - make cs-ci
+    - make test
+    - make guiding_test
+
+after_script:
+    - kill $(jobs -p)

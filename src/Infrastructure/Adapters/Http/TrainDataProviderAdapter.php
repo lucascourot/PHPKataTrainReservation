@@ -8,6 +8,7 @@ use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\Coach;
 use TrainReservation\Domain\ReservedSeat;
+use TrainReservation\Domain\Seat;
 use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
@@ -26,10 +27,9 @@ final class TrainDataProviderAdapter implements TrainDataProvider
 
     public function fetchTrainTopology(TrainId $trainId): TrainTopology
     {
-        $response = $this->httpClient->send(new Request('GET', 'http://localhost:8081/data_for_train/express_2000'));
+        $response = $this->httpClient->send(new Request('GET', 'http://localhost:8081/data_for_train/'.$trainId->getId()));
 
         $seats = \GuzzleHttp\json_decode($response->getBody(), true);
-
         $topology = [];
         $coaches = [];
 
@@ -40,7 +40,13 @@ final class TrainDataProviderAdapter implements TrainDataProvider
         }
 
         foreach ($coaches as $coach) {
-            $topology[] = new Coach(array_values($coach));
+            $seatsInCoach = array_values($coach);
+
+            uasort($seatsInCoach, function (Seat $seat1, Seat $seat2) {
+                return $seat1->getReference() <=> $seat2->getReference();
+            });
+
+            $topology[] = new Coach($seatsInCoach);
         }
 
         return new TrainTopology($topology);

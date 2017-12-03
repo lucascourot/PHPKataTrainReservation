@@ -2,7 +2,7 @@
 
 namespace TrainReservation\Domain;
 
-final class AvailableSeat
+final class AvailableSeat extends Seat
 {
     public function __construct(string $reference)
     {

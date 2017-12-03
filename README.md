@@ -1,6 +1,6 @@
 # Kata: Train Reservation
 
-([from Emily Bache's kata](https://github.com/emilybache/KataTrainReservation))
+[![Build Status](https://travis-ci.org/lucascourot/KataTrainReservation.svg?branch=php)](https://travis-ci.org/lucascourot/KataTrainReservation/branches)
 
 Railway operators aren't always known for their use of cutting edge technology, and in this case they're a little behind the times. The railway people want you to help them to improve their online booking service. They'd like to be able to not only sell tickets online, but to decide exactly which seats should be reserved, at the time of booking.
 
@@ -19,10 +19,6 @@ A reservation comprises a json document with three fields, the train id, booking
     {"train_id": "express_2000", "booking_reference": "75bcd15", "seats": ["1A", "1B"]}
 
 If it is not possible to find suitable seats to reserve, the service should instead return an empty list of seats and an empty string for the booking reference. The test cases in guiding_test.py outline the expected interface.
-
-### Command line option
-
-If you think it's too hard to come up with a fully deployed HTTP service, you could instead write a command line program which takes the train id and number of seats as command line arguments, and returns the same json as above.
 
 ### Booking Reference Service
 
@@ -78,4 +74,6 @@ The service has one additional method, that will remove all reservations on a pa
 
     make start_services -j2
 
-###
+### Credits
+
+Developed by [Lucas Courot](https://github.com/lucascourot/KataTrainReservation), from [Emily Bache](https://github.com/emilybache/KataTrainReservation)'s kata, inspired by [Thomas Pierrain](https://github.com/42skillz/kata-TrainReservation).

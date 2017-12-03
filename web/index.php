@@ -14,8 +14,12 @@ $ticketOffice = new TicketOfficeAdapter(new BookingReferenceProviderAdapter($guz
 $request = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST);
 
 $server = Server::createServerFromRequest(
-    function ($request, $response, $done) use ($ticketOffice) {
-        return $ticketOffice->reserveSeats($request);
+    function (\Zend\Diactoros\ServerRequest $request, $response, $done) use ($ticketOffice) {
+        if ($request->getMethod() === 'POST') {
+            return $ticketOffice->reserveSeats($request);
+        }
+
+        return new \Zend\Diactoros\Response\JsonResponse(['status' => 'working']);
     },
     $request
 );
