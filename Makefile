@@ -38,3 +38,9 @@ cs-fix: ## Fix code style
 
 cs-ci: ## Run Continuous Integration code style check
 	./bin/php-cs-fixer fix --dry-run --using-cache=no --verbose
+
+# Train Office
+
+.PHONY: start
+start: ## Starts the Ticket Office Service
+	php -S localhost:8083 web/index.php
