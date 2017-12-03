@@ -6,5 +6,8 @@ interface TrainDataProvider
 {
     public function fetchTrainTopology(TrainId $trainId): TrainTopology;
 
-    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats);
+    /**
+     * @param ReservedSeat[] $reservedSeats
+     */
+    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats): void;
 }

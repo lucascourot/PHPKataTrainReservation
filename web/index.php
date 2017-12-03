@@ -8,7 +8,8 @@ use TrainReservation\Infrastructure\Adapters\Http\TrainDataProviderAdapter;
 use Zend\Diactoros\ServerRequestFactory;
 use Zend\Diactoros\Server;
 
-$ticketOffice = new TicketOfficeAdapter(new BookingReferenceProviderAdapter(), new TrainDataProviderAdapter());
+$guzzle = new \GuzzleHttp\Client();
+$ticketOffice = new TicketOfficeAdapter(new BookingReferenceProviderAdapter($guzzle), new TrainDataProviderAdapter($guzzle));
 
 $request = ServerRequestFactory::fromGlobals($_SERVER, $_GET, $_POST);
 

@@ -4,6 +4,7 @@
   "type": "project",
   "require": {
     "php": "^7.1",
+    "guzzlehttp/guzzle": "^6.3",
     "zendframework/zend-diactoros": "^1.6"
   },
   "require-dev": {

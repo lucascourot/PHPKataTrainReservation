@@ -40,7 +40,7 @@ class TicketOfficeAdapter
 
         $reservedSeatsPresentation = [];
         foreach ($confirmation->getReservedSeats() as $reservedSeat) {
-            $reservedSeatsPresentation[$reservedSeat->getReference()] = $reservedSeat->getBookingReference()->getReference();
+            $reservedSeatsPresentation[] = $reservedSeat->getReference();
         }
 
         return new JsonResponse([

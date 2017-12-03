@@ -2,6 +2,8 @@
 
 namespace TrainReservation\Infrastructure\Adapters\Http;
 
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Request;
 use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\Coach;
@@ -12,45 +14,59 @@ use TrainReservation\Domain\TrainTopology;
 
 final class TrainDataProviderAdapter implements TrainDataProvider
 {
-    private $bookingReference;
+    /**
+     * @var ClientInterface
+     */
+    private $httpClient;
 
-    public function __construct()
+    public function __construct(ClientInterface $httpClient)
     {
-        $this->bookingReference = new BookingReference('abc');
+        $this->httpClient = $httpClient;
     }
 
     public function fetchTrainTopology(TrainId $trainId): TrainTopology
     {
-        return new TrainTopology([
-            new Coach([
-                new ReservedSeat('A1', $this->bookingReference),
-                new ReservedSeat('A2', $this->bookingReference),
-                new ReservedSeat('A3', $this->bookingReference),
-                new ReservedSeat('A4', $this->bookingReference),
-                new ReservedSeat('A5', $this->bookingReference),
-                new ReservedSeat('A6', $this->bookingReference),
-                new ReservedSeat('A7', $this->bookingReference),
-                new AvailableSeat('A8'),
-                new AvailableSeat('A9'),
-                new AvailableSeat('A10'),
-            ]),
-            new Coach([
-                new ReservedSeat('B1', $this->bookingReference),
-                new ReservedSeat('B2', $this->bookingReference),
-                new ReservedSeat('B3', $this->bookingReference),
-                new ReservedSeat('B4', $this->bookingReference),
-                new ReservedSeat('B5', $this->bookingReference),
-                new AvailableSeat('B6'),
-                new AvailableSeat('B7'),
-                new AvailableSeat('B8'),
-                new AvailableSeat('B9'),
-                new AvailableSeat('B10'),
-            ]),
-        ]);
+        $response = $this->httpClient->send(new Request('GET', 'http://localhost:8081/data_for_train/express_2000'));
+
+        $seats = \GuzzleHttp\json_decode($response->getBody(), true);
+
+        $topology = [];
+        $coaches = [];
+
+        foreach ($seats['seats'] as $seat) {
+            $coaches[$seat['coach']][] = empty($seat['booking_reference'])
+                ? new AvailableSeat($seat['seat_number'].$seat['coach'])
+                : new ReservedSeat($seat['seat_number'].$seat['coach'], new BookingReference($seat['booking_reference']));
+        }
+
+        foreach ($coaches as $coach) {
+            $topology[] = new Coach(array_values($coach));
+        }
+
+        return new TrainTopology($topology);
     }
 
-    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats)
+    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats): void
     {
-//        echo 'Reserved!';
+        $seatsReferences = [];
+        $bookingReference = '';
+        /** @var ReservedSeat $reservedSeat */
+        foreach ($reservedSeats as $reservedSeat) {
+            $bookingReference = $reservedSeat->getBookingReference()->getReference();
+            $seatsReferences[] = $reservedSeat->getReference();
+        }
+        $seatsFormatted = '["'.implode('","', $seatsReferences).'"]';
+
+        $this->httpClient->request(
+            'POST',
+            'http://localhost:8081/reserve',
+            [
+                'form_params' => [
+                    'train_id' => $trainId->getId(),
+                    'booking_reference' => $bookingReference,
+                    'seats' => $seatsFormatted,
+                ],
+            ]
+        );
     }
 }
