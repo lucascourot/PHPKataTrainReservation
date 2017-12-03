@@ -1,19 +1,19 @@
 <?php
 
-namespace TrainReservationTest;
+namespace TrainReservationTest\Domain;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use TrainReservation\BookingReference;
-use TrainReservation\BookingReferenceProvider;
-use TrainReservation\Coach;
-use TrainReservation\ReservationRequest;
-use TrainReservation\AvailableSeat;
-use TrainReservation\ReservedSeat;
-use TrainReservation\TicketOffice;
-use TrainReservation\TrainDataProvider;
-use TrainReservation\TrainId;
-use TrainReservation\TrainTopology;
+use TrainReservation\Domain\BookingReference;
+use TrainReservation\Domain\BookingReferenceProvider;
+use TrainReservation\Domain\Coach;
+use TrainReservation\Domain\ReservationRequest;
+use TrainReservation\Domain\AvailableSeat;
+use TrainReservation\Domain\ReservedSeat;
+use TrainReservation\Domain\TicketOffice;
+use TrainReservation\Domain\TrainDataProvider;
+use TrainReservation\Domain\TrainId;
+use TrainReservation\Domain\TrainTopology;
 
 class TicketOfficeTest extends TestCase
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TrainReservationTest;
+namespace TrainReservationTest\Domain;
 
 use PHPUnit\Framework\TestCase;
-use TrainReservation\AvailableSeat;
-use TrainReservation\BookingReference;
-use TrainReservation\OptionOfReservation;
-use TrainReservation\ReservedSeat;
+use TrainReservation\Domain\AvailableSeat;
+use TrainReservation\Domain\BookingReference;
+use TrainReservation\Domain\OptionOfReservation;
+use TrainReservation\Domain\ReservedSeat;
 
 class OptionOfReservationTest extends TestCase
 {

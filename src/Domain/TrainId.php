@@ -1,6 +1,6 @@
 <?php
 
-namespace TrainReservation;
+namespace TrainReservation\Domain;
 
 final class TrainId
 {
