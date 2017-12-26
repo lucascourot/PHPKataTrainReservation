@@ -1,6 +1,7 @@
 # Kata: Train Reservation
 
 [![Build Status](https://travis-ci.org/lucascourot/KataTrainReservation.svg?branch=php)](https://travis-ci.org/lucascourot/KataTrainReservation/branches)
+[![Coverage Status](https://coveralls.io/repos/github/lucascourot/KataTrainReservation/badge.svg?branch=php)](https://coveralls.io/github/lucascourot/KataTrainReservation?branch=php)
 
 Railway operators aren't always known for their use of cutting edge technology, and in this case they're a little behind the times. The railway people want you to help them to improve their online booking service. They'd like to be able to not only sell tickets online, but to decide exactly which seats should be reserved, at the time of booking.
 

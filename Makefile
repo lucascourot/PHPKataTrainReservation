@@ -25,7 +25,7 @@ guiding_test: ## Launch the guiding test
 .PHONY: test
 test: ## Run unit tests
 	@test -f bin/phpunit || echo "cannot run unit tests (needs phpunit/phpunit)"
-	php bin/phpunit tests
+	php bin/phpunit --testdox --coverage-text --coverage-clover ./build/logs/clover.xml --whitelist=src/Domain
 
 # Coding Style
 
