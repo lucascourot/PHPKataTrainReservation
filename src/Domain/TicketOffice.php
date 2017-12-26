@@ -33,7 +33,7 @@ class TicketOffice
 
         $bookingReference = $this->bookingReferenceService->fetchNewBookingReference();
         $reservedSeats = $optionOfReservation->reserveSeatsWith($bookingReference);
-        $this->trainDataProvider->markSeatsAsReserved($trainIdentity, $reservedSeats);
+        $this->trainDataProvider->markSeatsAsReservedFromList($trainIdentity, $reservedSeats);
 
         return new ReservationConfirmation($reservationRequest->getTrainId(), $bookingReference, $reservedSeats);
     }

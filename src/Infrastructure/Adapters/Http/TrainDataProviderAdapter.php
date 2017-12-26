@@ -39,6 +39,8 @@ final class TrainDataProviderAdapter implements TrainDataProvider
                 : new ReservedSeat($seat['seat_number'].$seat['coach'], new BookingReference($seat['booking_reference']));
         }
 
+        ksort($coaches);
+
         foreach ($coaches as $coach) {
             $seatsInCoach = array_values($coach);
 
@@ -52,7 +54,7 @@ final class TrainDataProviderAdapter implements TrainDataProvider
         return new TrainTopology($topology);
     }
 
-    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats): void
+    public function markSeatsAsReservedFromList(TrainId $trainId, array $reservedSeats): void
     {
         $seatsReferences = [];
         $bookingReference = '';

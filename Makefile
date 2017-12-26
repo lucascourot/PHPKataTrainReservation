@@ -43,4 +43,4 @@ cs-ci: ## Run Continuous Integration code style check
 
 .PHONY: start
 start: ## Starts the Ticket Office Service
-	php -S localhost:8083 web/index.php
+	php -S 127.0.0.1:8083 web/index.php

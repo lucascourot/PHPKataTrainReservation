@@ -11,6 +11,10 @@ final class TrainId
 
     public function __construct(string $id)
     {
+        if (!preg_match('/^[a-zA-Z0-9_-]+$/', $id)) {
+            throw new \LogicException('Invalid train id.');
+        }
+
         $this->id = $id;
     }
 

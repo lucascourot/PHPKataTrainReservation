@@ -49,16 +49,23 @@ final class TrainTopology
             return $optionOfReservation;
         }
 
-        if ($coach = $this->findACoachWithIdealCapacityFor($numberOfSeatsToReserve)) {
-            $optionOfReservation->markSeatsAsReserved($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
+        $singleCoachForReservation = $this->findACoachWithIdealCapacityFor($numberOfSeatsToReserve)
+            ?? $this->findACoachThatCanBreakIdealCapacityFor($numberOfSeatsToReserve);
+
+        if ($singleCoachForReservation) {
+            $optionOfReservation->markSeatsAsReservedFromList(
+                $singleCoachForReservation->getAvailableSeatsFor($numberOfSeatsToReserve)
+            );
 
             return $optionOfReservation;
         }
 
-        if ($coach = $this->findACoachThatCanBreakIdealCapacityFor($numberOfSeatsToReserve)) {
-            $optionOfReservation->markSeatsAsReserved($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
+        foreach ($this->coaches as $coach) {
+            $optionOfReservation->markSeatsAsReservedFromList($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
 
-            return $optionOfReservation;
+            if ($optionOfReservation->isSatisfied()) {
+                break;
+            }
         }
 
         return $optionOfReservation;

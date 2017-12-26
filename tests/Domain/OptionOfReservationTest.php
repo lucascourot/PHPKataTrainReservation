@@ -19,13 +19,13 @@ class OptionOfReservationTest extends TestCase
         $this->assertFalse($optionOfReservation->isSatisfied());
     }
 
-    public function testShouldMarkSeatsAsReserved()
+    public function testShouldmarkSeatsAsReservedFromList()
     {
         // Given
         $optionOfReservation = new OptionOfReservation(3);
 
         // When
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new AvailableSeat('A1'),
             new AvailableSeat('A2'),
             new AvailableSeat('A3'),
@@ -41,7 +41,7 @@ class OptionOfReservationTest extends TestCase
         $optionOfReservation = new OptionOfReservation(1);
 
         // When
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new ReservedSeat('A1', new BookingReference('abc')),
         ]);
 
@@ -56,7 +56,7 @@ class OptionOfReservationTest extends TestCase
         $bookingReference = new BookingReference('abc');
 
         // When
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new AvailableSeat('A1'),
             new AvailableSeat('A2'),
             new AvailableSeat('A3'),
@@ -83,7 +83,7 @@ class OptionOfReservationTest extends TestCase
         $this->expectException(\LogicException::class);
 
         // When
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new AvailableSeat('A1'),
             new AvailableSeat('A2'),
         ]);
@@ -101,10 +101,10 @@ class OptionOfReservationTest extends TestCase
         $bookingReference = new BookingReference('abc');
 
         // When
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new AvailableSeat('A1'),
         ]);
-        $optionOfReservation->markSeatsAsReserved([
+        $optionOfReservation->markSeatsAsReservedFromList([
             new AvailableSeat('A2'),
         ]);
 

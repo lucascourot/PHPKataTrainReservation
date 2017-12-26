@@ -67,7 +67,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(
+        $this->trainDataProvider->markSeatsAsReservedFromList(
             $this->trainId,
             [
                 new ReservedSeat('A1', $this->bookingReference),
@@ -104,7 +104,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldNotBeCalled();
         $this->expectException(\LogicException::class);
 
         // When
@@ -129,7 +129,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
@@ -160,7 +160,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldNotBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
@@ -203,7 +203,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
@@ -251,7 +251,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
@@ -300,7 +300,7 @@ class TicketOfficeTest extends TestCase
         ]));
 
         // Expect
-        $this->trainDataProvider->markSeatsAsReserved(Argument::any(), Argument::any())->shouldBeCalled();
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
@@ -313,6 +313,71 @@ class TicketOfficeTest extends TestCase
             [
                 new ReservedSeat('B6', $this->bookingReference),
                 new ReservedSeat('B7', $this->bookingReference),
+            ],
+            $reservationConfirmation->getReservedSeats()
+        );
+    }
+
+    public function testShouldReserveSeatsInDifferentCoachesForTheSameReservation()
+    {
+        // Given
+        $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
+            new Coach([
+                new ReservedSeat('A1', $this->bookingReference),
+                new ReservedSeat('A2', $this->bookingReference),
+                new ReservedSeat('A3', $this->bookingReference),
+                new ReservedSeat('A4', $this->bookingReference),
+                new ReservedSeat('A5', $this->bookingReference),
+                new AvailableSeat('A6'),
+                new AvailableSeat('A7'),
+                new AvailableSeat('A8'),
+                new AvailableSeat('A9'),
+                new AvailableSeat('A10'),
+            ]),
+            new Coach([
+                new ReservedSeat('B1', $this->bookingReference),
+                new ReservedSeat('B2', $this->bookingReference),
+                new ReservedSeat('B3', $this->bookingReference),
+                new ReservedSeat('B4', $this->bookingReference),
+                new ReservedSeat('B5', $this->bookingReference),
+                new AvailableSeat('B6'),
+                new AvailableSeat('B7'),
+                new AvailableSeat('B8'),
+                new AvailableSeat('B9'),
+                new AvailableSeat('B10'),
+            ]),
+            new Coach([
+                new ReservedSeat('C1', $this->bookingReference),
+                new ReservedSeat('C2', $this->bookingReference),
+                new ReservedSeat('C3', $this->bookingReference),
+                new ReservedSeat('C4', $this->bookingReference),
+                new ReservedSeat('C5', $this->bookingReference),
+                new AvailableSeat('C6'),
+                new AvailableSeat('C7'),
+                new AvailableSeat('C8'),
+                new AvailableSeat('C9'),
+                new AvailableSeat('C10'),
+            ]),
+        ]));
+
+        // Expect
+        $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
+
+        // When
+        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 6));
+
+        // Then
+        $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
+        $this->assertEquals($this->bookingReference, $reservationConfirmation->getBookingReference());
+        $this->assertEquals(
+            [
+                new ReservedSeat('A6', $this->bookingReference),
+                new ReservedSeat('A7', $this->bookingReference),
+                new ReservedSeat('A8', $this->bookingReference),
+                new ReservedSeat('A9', $this->bookingReference),
+                new ReservedSeat('A10', $this->bookingReference),
+                new ReservedSeat('B6', $this->bookingReference),
             ],
             $reservationConfirmation->getReservedSeats()
         );

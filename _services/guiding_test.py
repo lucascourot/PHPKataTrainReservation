@@ -10,13 +10,13 @@ import subprocess
 import unittest
 import os
 
-url = "http://localhost:8083"
+url = "http://127.0.0.1:8083"
 interpreter = "python3"
 
 class TrainReservationTest(unittest.TestCase):
 
     def test_reserve_seats_via_POST(self):
-        form_data = {"train_id": "express_2000", "number_of_seats": 4}
+        form_data = {"train_id": "express_2000", "seat_count": 4}
         data = urllib.parse.urlencode(form_data)
 
         req = urllib.request.Request(url + "/reserve", bytes(data, encoding="ISO-8859-1"))

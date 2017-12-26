@@ -9,5 +9,5 @@ interface TrainDataProvider
     /**
      * @param ReservedSeat[] $reservedSeats
      */
-    public function markSeatsAsReserved(TrainId $trainId, array $reservedSeats): void;
+    public function markSeatsAsReservedFromList(TrainId $trainId, array $reservedSeats): void;
 }

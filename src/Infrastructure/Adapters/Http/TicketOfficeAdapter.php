@@ -35,7 +35,7 @@ class TicketOfficeAdapter
 
         $confirmation = $ticketOffice->makeReservation(new ReservationRequest(
             new TrainId($request->getParsedBody()['train_id']),
-            $request->getParsedBody()['number_of_seats']
+            $request->getParsedBody()['seat_count']
         ));
 
         $reservedSeatsPresentation = [];
