@@ -117,7 +117,7 @@ class TicketOfficeTest extends TestCase
         $this->assertEmpty($reservationConfirmation->getReservedSeats());
     }
 
-    public function testShouldNotReserveSeatsWhenTrainIsFull()
+    public function testShouldNotReserveSeatsWhenTrainReachedOverallCapacityOf70percent()
     {
         // Given
         $this->trainDataProvider->fetchTrainTopology($this->trainId)->willReturn(new TrainTopology([
@@ -125,6 +125,13 @@ class TicketOfficeTest extends TestCase
                 new ReservedSeat('A1', $this->bookingReference),
                 new ReservedSeat('A2', $this->bookingReference),
                 new ReservedSeat('A3', $this->bookingReference),
+                new ReservedSeat('A4', $this->bookingReference),
+                new ReservedSeat('A5', $this->bookingReference),
+                new ReservedSeat('A6', $this->bookingReference),
+                new ReservedSeat('A7', $this->bookingReference),
+                new AvailableSeat('A8'),
+                new AvailableSeat('A9'),
+                new AvailableSeat('A10'),
             ]),
         ]));
 

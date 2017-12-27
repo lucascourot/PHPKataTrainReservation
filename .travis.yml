@@ -17,6 +17,7 @@ before_script:
 script:
     - make cs-ci
     - make test
+    - make mutation_test
     - make guiding_test
 
 after_script:

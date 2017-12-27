@@ -27,6 +27,11 @@ test: ## Run unit tests
 	@test -f bin/phpunit || echo "cannot run unit tests (needs phpunit/phpunit)"
 	php bin/phpunit --testdox --coverage-text --coverage-clover ./build/logs/clover.xml --whitelist=src/Domain
 
+.PHONY: mutation_test
+mutation_test: ## Run mutation tests
+	@test -f bin/humbug || echo "cannot run unit tests (needs humbug/humbug)"
+	php bin/humbug
+
 # Coding Style
 
 .PHONY: cs cs-fix cs-ci

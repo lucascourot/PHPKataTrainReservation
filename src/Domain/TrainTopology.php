@@ -14,7 +14,7 @@ final class TrainTopology
     /**
      * @var int
      */
-    private $overallNumberOfAlreadyReservedSeats;
+    private $overallNumberOfAlreadyReservedSeats = 0;
 
     /**
      * @var int
