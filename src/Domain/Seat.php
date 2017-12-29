@@ -2,15 +2,7 @@
 
 namespace TrainReservation\Domain;
 
-abstract class Seat
+interface Seat
 {
-    /**
-     * @var string
-     */
-    protected $reference;
-
-    public function getReference(): string
-    {
-        return $this->reference;
-    }
+    public function getReference(): string;
 }

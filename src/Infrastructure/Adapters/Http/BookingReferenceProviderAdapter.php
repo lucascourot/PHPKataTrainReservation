@@ -7,6 +7,9 @@ use GuzzleHttp\Psr7\Request;
 use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\BookingReferenceProvider;
 
+/**
+ * @Adapter
+ */
 final class BookingReferenceProviderAdapter implements BookingReferenceProvider
 {
     /**
@@ -19,6 +22,9 @@ final class BookingReferenceProviderAdapter implements BookingReferenceProvider
         $this->httpClient = $httpClient;
     }
 
+    /**
+     * Requests the booking service to fetch a new booking reference
+     */
     public function fetchNewBookingReference(): BookingReference
     {
         $response = $this->httpClient->send(new Request('GET', 'http://localhost:8082/booking_reference'));

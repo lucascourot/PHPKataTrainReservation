@@ -13,6 +13,9 @@ use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
+/**
+ * @Adapter
+ */
 final class TrainDataProviderAdapter implements TrainDataProvider
 {
     /**
@@ -25,6 +28,9 @@ final class TrainDataProviderAdapter implements TrainDataProvider
         $this->httpClient = $httpClient;
     }
 
+    /**
+     * Fetches and parses the json train topology provided by the train data provider
+     */
     public function fetchTrainTopology(TrainId $trainId): TrainTopology
     {
         $response = $this->httpClient->send(new Request('GET', 'http://localhost:8081/data_for_train/'.$trainId->getId()));
@@ -54,6 +60,9 @@ final class TrainDataProviderAdapter implements TrainDataProvider
         return new TrainTopology($topology);
     }
 
+    /**
+     * Sends an http request to the train data service to reserve chosen seats
+     */
     public function markSeatsAsReservedFromList(TrainId $trainId, array $reservedSeats): void
     {
         $seatsReferences = [];

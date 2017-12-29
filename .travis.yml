@@ -9,8 +9,10 @@ install:
     - sudo pip3 install -U setuptools
     - sudo pip3 install -U virtualenvwrapper
     - sudo pip3 install cherrypy
+    - composer global require --update-no-dev edgedesign/phpqa phpstan/phpstan jakub-onderka/php-parallel-lint
 
 before_script:
+    - export PATH="$PATH:/home/travis/.config/composer/vendor/bin"
     - make services -j2 > /dev/null 2>&1 &
     - make start > /dev/null 2>&1 &
 
@@ -18,6 +20,9 @@ script:
     - make cs-ci
     - make test
     - make mutation_test
+    - make check_security
+    - echo $PATH
+    - make qa
     - make guiding_test
 
 after_script:

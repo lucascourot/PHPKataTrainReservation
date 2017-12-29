@@ -32,6 +32,15 @@ mutation_test: ## Run mutation tests
 	@test -f bin/humbug || echo "cannot run unit tests (needs humbug/humbug)"
 	php bin/humbug
 
+.PHONY: check_security
+check_security: ## Check for dependency vulnerabilities
+	curl -H "Accept: text/plain" https://security.sensiolabs.org/check_lock -F lock=@composer.lock
+
+.PHONY: qa
+qa: ## PHP QA Analyzer
+	@which phpqa > /dev/null || echo "cannot run unit tests (needs EdgedesignCZ/phpqa)"
+	phpqa --report --analyzedDirs src --tools phpqa,phpmetrics,phploc,phpmd,pdepend,phpcpd,parallel-lint,phpstan --buildDir build/qa
+
 # Coding Style
 
 .PHONY: cs cs-fix cs-ci

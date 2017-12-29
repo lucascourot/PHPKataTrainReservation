@@ -11,6 +11,9 @@ use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use Zend\Diactoros\Response\JsonResponse;
 
+/**
+ * @Adapter
+ */
 class TicketOfficeAdapter
 {
     /**
@@ -29,6 +32,9 @@ class TicketOfficeAdapter
         $this->trainDataProvider = $trainDataProvider;
     }
 
+    /**
+     * Http controller to reserve seats
+     */
     public function reserveSeats(ServerRequestInterface $request): ResponseInterface
     {
         $ticketOffice = new TicketOffice($this->bookingReferenceService, $this->trainDataProvider);

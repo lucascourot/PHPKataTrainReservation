@@ -2,8 +2,13 @@
 
 namespace TrainReservation\Domain;
 
-final class ReservedSeat extends Seat
+final class ReservedSeat implements Seat
 {
+    /**
+     * @var string
+     */
+    private $reference;
+
     /**
      * @var BookingReference
      */
@@ -18,5 +23,10 @@ final class ReservedSeat extends Seat
     public function getBookingReference(): BookingReference
     {
         return $this->bookingReference;
+    }
+
+    public function getReference(): string
+    {
+        return $this->reference;
     }
 }
