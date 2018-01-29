@@ -27,7 +27,7 @@ final class OptionOfReservation
 
         foreach ($seats as $availableSeat) {
             if (!$availableSeat instanceof AvailableSeat) {
-                continue;
+                throw new \LogicException('Can only reserve available seats.');
             }
 
             $this->seatsToReserve[] = $availableSeat;

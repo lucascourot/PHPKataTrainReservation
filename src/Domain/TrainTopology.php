@@ -21,6 +21,9 @@ final class TrainTopology
      */
     private $overallNumberOfAllSeats;
 
+    /**
+     * @param Coach[] $coaches
+     */
     public function __construct(array $coaches)
     {
         $this->coaches = $coaches;
@@ -36,11 +39,6 @@ final class TrainTopology
         }
     }
 
-    /**
-     * @param int $numberOfSeatsToReserve
-     *
-     * @return OptionOfReservation
-     */
     public function tryToReserveSeats(int $numberOfSeatsToReserve): OptionOfReservation
     {
         $optionOfReservation = new OptionOfReservation($numberOfSeatsToReserve);
@@ -60,15 +58,7 @@ final class TrainTopology
             return $optionOfReservation;
         }
 
-        foreach ($this->coaches as $coach) {
-            $optionOfReservation->markSeatsAsReservedFromList($coach->getAvailableSeatsFor($numberOfSeatsToReserve));
-
-            if ($optionOfReservation->isSatisfied()) {
-                break;
-            }
-        }
-
-        return $optionOfReservation;
+        return $this->reserveFromDifferentCoaches($numberOfSeatsToReserve, $optionOfReservation);
     }
 
     private function trainCapacityExceededWith(int $numberOfSeatsToReserve): bool
@@ -98,5 +88,18 @@ final class TrainTopology
         }
 
         return null;
+    }
+
+    private function reserveFromDifferentCoaches(int $numberOfSeatsToReserve, OptionOfReservation $optionOfReservation): OptionOfReservation
+    {
+        $coach = 0;
+
+        while (!$optionOfReservation->isSatisfied()) {
+            $optionOfReservation->markSeatsAsReservedFromList(
+                $this->coaches[$coach++]->getAvailableSeatsFor($numberOfSeatsToReserve)
+            );
+        }
+
+        return $optionOfReservation;
     }
 }

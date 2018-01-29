@@ -238,7 +238,7 @@ class TicketOfficeTest extends TestCase
                 new ReservedSeat('A4', $this->bookingReference),
                 new ReservedSeat('A5', $this->bookingReference),
                 new ReservedSeat('A6', $this->bookingReference),
-                new AvailableSeat('A7'),
+                new ReservedSeat('A7', $this->bookingReference),
                 new AvailableSeat('A8'),
                 new AvailableSeat('A9'),
                 new AvailableSeat('A10'),
@@ -250,10 +250,46 @@ class TicketOfficeTest extends TestCase
                 new ReservedSeat('B4', $this->bookingReference),
                 new ReservedSeat('B5', $this->bookingReference),
                 new ReservedSeat('B6', $this->bookingReference),
-                new AvailableSeat('B7'),
+                new ReservedSeat('B7', $this->bookingReference),
                 new AvailableSeat('B8'),
                 new AvailableSeat('B9'),
                 new AvailableSeat('B10'),
+            ]),
+            new Coach([
+                new ReservedSeat('C1', $this->bookingReference),
+                new ReservedSeat('C2', $this->bookingReference),
+                new ReservedSeat('C3', $this->bookingReference),
+                new ReservedSeat('C4', $this->bookingReference),
+                new ReservedSeat('C5', $this->bookingReference),
+                new AvailableSeat('C6'),
+                new AvailableSeat('C7'),
+                new AvailableSeat('C8'),
+                new AvailableSeat('C9'),
+                new AvailableSeat('C10'),
+            ]),
+            new Coach([
+                new ReservedSeat('D1', $this->bookingReference),
+                new ReservedSeat('D2', $this->bookingReference),
+                new ReservedSeat('D3', $this->bookingReference),
+                new ReservedSeat('D4', $this->bookingReference),
+                new ReservedSeat('D5', $this->bookingReference),
+                new ReservedSeat('D6', $this->bookingReference),
+                new AvailableSeat('D7'),
+                new AvailableSeat('D8'),
+                new AvailableSeat('D9'),
+                new AvailableSeat('D10'),
+            ]),
+            new Coach([
+                new ReservedSeat('E1', $this->bookingReference),
+                new ReservedSeat('E2', $this->bookingReference),
+                new ReservedSeat('E3', $this->bookingReference),
+                new ReservedSeat('E4', $this->bookingReference),
+                new ReservedSeat('E5', $this->bookingReference),
+                new ReservedSeat('E6', $this->bookingReference),
+                new AvailableSeat('E7'),
+                new AvailableSeat('E8'),
+                new AvailableSeat('E9'),
+                new AvailableSeat('E10'),
             ]),
         ]));
 
@@ -262,15 +298,17 @@ class TicketOfficeTest extends TestCase
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 2));
+        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 4));
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
         $this->assertEquals($this->bookingReference, $reservationConfirmation->getBookingReference());
         $this->assertEquals(
             [
-                new ReservedSeat('A7', $this->bookingReference),
-                new ReservedSeat('A8', $this->bookingReference),
+                new ReservedSeat('C6', $this->bookingReference),
+                new ReservedSeat('C7', $this->bookingReference),
+                new ReservedSeat('C8', $this->bookingReference),
+                new ReservedSeat('C9', $this->bookingReference),
             ],
             $reservationConfirmation->getReservedSeats()
         );

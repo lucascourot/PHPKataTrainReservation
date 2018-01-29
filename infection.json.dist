@@ -1,0 +1,11 @@
+{
+    "timeout": 10,
+    "source": {
+        "directories": [
+            "src/Domain"
+        ]
+    },
+    "logs": {
+        "text": "build\/infection\/infection-log.txt"
+    }
+}

@@ -29,8 +29,8 @@ test: ## Run unit tests
 
 .PHONY: mutation_test
 mutation_test: ## Run mutation tests
-	@test -f bin/humbug || echo "cannot run unit tests (needs humbug/humbug)"
-	php bin/humbug
+	@test -f bin/infection || echo "cannot run unit tests (needs infection/infection)"
+	php bin/infection
 
 .PHONY: check_security
 check_security: ## Check for dependency vulnerabilities

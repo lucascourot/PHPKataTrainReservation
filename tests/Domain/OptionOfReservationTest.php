@@ -40,6 +40,9 @@ class OptionOfReservationTest extends TestCase
         // Given
         $optionOfReservation = new OptionOfReservation(1);
 
+        // Excpect
+        $this->expectException(\LogicException::class);
+
         // When
         $optionOfReservation->markSeatsAsReservedFromList([
             new ReservedSeat('A1', new BookingReference('abc')),
