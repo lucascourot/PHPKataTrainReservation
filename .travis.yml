@@ -17,11 +17,11 @@ before_script:
     - make start > /dev/null 2>&1 &
 
 script:
+    - composer validate --strict --no-check-lock
     - make cs-ci
     - make test
     - make mutation_test
     - make check_security
-    - echo $PATH
     - make qa
     - make guiding_test
 
