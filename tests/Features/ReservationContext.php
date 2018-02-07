@@ -1,13 +1,15 @@
 <?php
 
-use Behat\Behat\Tester\Exception\PendingException;
+namespace TrainReservationTest\Features;
+
 use Behat\Behat\Context\Context;
-use Behat\Gherkin\Node\PyStringNode;
 use Behat\Gherkin\Node\TableNode;
+use Mockery;
 use PHPUnit\Framework\Assert;
 use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\BookingReferenceProvider;
+use TrainReservation\Domain\Coach;
 use TrainReservation\Domain\ReservationConfirmation;
 use TrainReservation\Domain\ReservationRequest;
 use TrainReservation\Domain\ReservedSeat;
@@ -70,21 +72,22 @@ class ReservationContext implements Context
     /**
      * @Given I'm doing a reservation under booking reference :bookingReference provided by the booking reference service
      */
-    public function imDoingAReservationUnderBookingReferenceProvidedByTheBookingReferenceService(string $bookingReference) {
+    public function imDoingAReservationUnderBookingReferenceProvidedByTheBookingReferenceService(string $bookingReference)
+    {
         $this->bookingReference = new BookingReference($bookingReference);
 
         $this->bookingReferenceProvider->allows([
-            'fetchNewBookingReference' => $this->bookingReference
+            'fetchNewBookingReference' => $this->bookingReference,
         ]);
     }
 
     /**
-     * @Given the train is empty
+     * @Given the train with 10 seats is empty
      */
-    public function theTrainIsEmpty()
+    public function theTrainWith10SeatsIsEmpty()
     {
         $trainTopology = new TrainTopology([
-            new \TrainReservation\Domain\Coach([
+            new Coach([
                 new AvailableSeat('A1'),
                 new AvailableSeat('A2'),
                 new AvailableSeat('A3'),
@@ -95,7 +98,7 @@ class ReservationContext implements Context
                 new AvailableSeat('A8'),
                 new AvailableSeat('A9'),
                 new AvailableSeat('A10'),
-            ])
+            ]),
         ]);
 
         $this->trainDataProvider->shouldReceive('fetchTrainTopology')->withArgs([$this->trainId])->andReturn($trainTopology);
@@ -111,28 +114,20 @@ class ReservationContext implements Context
     }
 
     /**
-     * @Then seats :seats should be marked as reserved
+     * @Then seats below should be marked as reserved:
      */
-    public function seatsShouldBeMarkedAsReservedUnderBookingReferenceForTrain($seats)
+    public function seatsBelowShouldBeMarkedAsReserved(TableNode $table)
     {
-        $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [
-            $this->trainId,
-            [
-                new ReservedSeat('A1', $this->bookingReference),
-                new ReservedSeat('A2', $this->bookingReference),
-                new ReservedSeat('A3', $this->bookingReference),
-            ]
-        ]);
+        $seats = [];
+
+        foreach ($table as $row) {
+            $seats[] = new ReservedSeat($row['coach'].$row['seat'], $this->bookingReference);
+        }
+
+        $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
 
         Assert::assertEquals($this->trainId, $this->reservationConfirmation->getTrainId());
         Assert::assertEquals($this->bookingReference, $this->reservationConfirmation->getBookingReference());
-        Assert::assertEquals(
-            [
-                new ReservedSeat('A1', $this->bookingReference),
-                new ReservedSeat('A2', $this->bookingReference),
-                new ReservedSeat('A3', $this->bookingReference),
-            ],
-            $this->reservationConfirmation->getReservedSeats()
-        );
+        Assert::assertEquals($seats, $this->reservationConfirmation->getReservedSeats());
     }
 }

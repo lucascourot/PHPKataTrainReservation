@@ -1,0 +1,7 @@
+default:
+    translation:
+        locale: en
+    suites:
+        reservation:
+            paths: [ '%paths.base%/features' ]
+            contexts: [ 'TrainReservationTest\Features\ReservationContext' ]

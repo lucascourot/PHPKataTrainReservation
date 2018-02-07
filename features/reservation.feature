@@ -13,6 +13,10 @@ Feature: Reserve seats
     And I'm doing a reservation under booking reference "75bcd15" provided by the booking reference service
 
   Scenario: Reserve seats when train is empty
-    Given the train is empty
+    Given the train with 10 seats is empty
     When I reserve 3 seats
-    Then seats "A1, A2 and A3" should be marked as reserved
+    Then seats below should be marked as reserved:
+      | coach | seat |
+      | A     | 1    |
+      | A     | 2    |
+      | A     | 3    |
