@@ -49,6 +49,11 @@ class ReservationContext implements Context
     private $reservationConfirmation;
 
     /**
+     * @var \Exception
+     */
+    private $reservationException;
+
+    /**
      * Initializes context.
      *
      * Every scenario gets its own context instance.
@@ -105,12 +110,16 @@ class ReservationContext implements Context
     }
 
     /**
-     * @When I reserve :numberOfSeats seats
+     * @When I reserve :numberOfSeats seat(s)
      */
     public function iReserveSeats(int $numberOfSeats)
     {
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider, $this->trainDataProvider);
-        $this->reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, $numberOfSeats));
+        try {
+            $ticketOffice = new TicketOffice($this->bookingReferenceProvider, $this->trainDataProvider);
+            $this->reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, $numberOfSeats));
+        } catch (\Exception $exception) {
+            $this->reservationException = $exception;
+        }
     }
 
     /**
@@ -125,9 +134,19 @@ class ReservationContext implements Context
         }
 
         $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
+        Assert::assertEmpty($this->reservationException);
 
         Assert::assertEquals($this->trainId, $this->reservationConfirmation->getTrainId());
         Assert::assertEquals($this->bookingReference, $this->reservationConfirmation->getBookingReference());
         Assert::assertEquals($seats, $this->reservationConfirmation->getReservedSeats());
+    }
+
+    /**
+     * @Then reservation confirmation should be empty
+     */
+    public function reservationConfirmationShouldBeEmpty()
+    {
+        Assert::assertInstanceOf(\LogicException::class, $this->reservationException);
+        Assert::assertEmpty($this->reservationConfirmation);
     }
 }

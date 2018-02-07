@@ -47,9 +47,6 @@ class OptionOfReservationTest extends TestCase
         $optionOfReservation->markSeatsAsReservedFromList([
             new ReservedSeat('A1', new BookingReference('abc')),
         ]);
-
-        // Then
-        $this->assertFalse($optionOfReservation->isSatisfied());
     }
 
     public function testShouldBookReservedSeats()
@@ -92,9 +89,6 @@ class OptionOfReservationTest extends TestCase
         ]);
 
         $optionOfReservation->reserveSeatsWith($bookingReference);
-
-        // Then
-        $this->assertFalse($optionOfReservation->isSatisfied());
     }
 
     public function testShouldNotMarkAnyOtherSeatAsReservedIfAlreadySatisfied()

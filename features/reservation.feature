@@ -20,3 +20,8 @@ Feature: Reserve seats
       | A     | 1    |
       | A     | 2    |
       | A     | 3    |
+
+  Scenario: Reserve at least one seat
+    Given the train with 10 seats is empty
+    When I reserve 0 seat
+    Then reservation confirmation should be empty
