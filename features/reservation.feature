@@ -16,12 +16,28 @@ Feature: Reserve seats
     Given the train with 10 seats is empty
     When I reserve 3 seats
     Then seats below should be marked as reserved:
-      | coach | seat |
-      | A     | 1    |
-      | A     | 2    |
-      | A     | 3    |
+      | coach | seat_number |
+      | A     | 1           |
+      | A     | 2           |
+      | A     | 3           |
 
   Scenario: Reserve at least one seat
     Given the train with 10 seats is empty
     When I reserve 0 seat
-    Then reservation confirmation should be empty
+    Then I should get an error message "Cannot reserve less than one seat."
+
+  Scenario: Do no exceed overall capacity of 70 percent
+    Given train topology below:
+      | coach | seat_number | reserved |
+      | A     | 1           | x        |
+      | A     | 2           | x        |
+      | A     | 3           | x        |
+      | A     | 4           | x        |
+      | A     | 5           | x        |
+      | A     | 6           | x        |
+      | A     | 7           | x        |
+      | A     | 8           |          |
+      | A     | 9           |          |
+      | A     | 10          |          |
+    When I reserve 1 seat
+    Then reservation should be rejected

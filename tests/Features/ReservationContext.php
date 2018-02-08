@@ -130,7 +130,7 @@ class ReservationContext implements Context
         $seats = [];
 
         foreach ($table as $row) {
-            $seats[] = new ReservedSeat($row['coach'].$row['seat'], $this->bookingReference);
+            $seats[] = new ReservedSeat($row['coach'].$row['seat_number'], $this->bookingReference);
         }
 
         $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
@@ -142,11 +142,49 @@ class ReservationContext implements Context
     }
 
     /**
-     * @Then reservation confirmation should be empty
+     * @Then I should get an error message :message
      */
-    public function reservationConfirmationShouldBeEmpty()
+    public function iShouldGetAnErrorMessage($message)
     {
         Assert::assertInstanceOf(\LogicException::class, $this->reservationException);
+        Assert::assertSame($message, $this->reservationException->getMessage());
         Assert::assertEmpty($this->reservationConfirmation);
+    }
+
+    /**
+     * @Given train topology below:
+     */
+    public function trainTopologyBelow(TableNode $seats)
+    {
+        $topology = [];
+        $coaches = [];
+
+        foreach ($seats as $seat) {
+            $coaches[$seat['coach']][] = empty($seat['reserved'])
+                ? new AvailableSeat($seat['seat_number'].$seat['coach'])
+                : new ReservedSeat($seat['seat_number'].$seat['coach'], new BookingReference('abcde'));
+        }
+
+        foreach ($coaches as $coach) {
+            $seatsInCoach = array_values($coach);
+
+            $topology[] = new Coach($seatsInCoach);
+        }
+
+        $trainTopology = new TrainTopology($topology);
+
+        $this->trainDataProvider->shouldReceive('fetchTrainTopology')->withArgs([$this->trainId])->andReturn($trainTopology);
+    }
+
+    /**
+     * @Then reservation should be rejected
+     */
+    public function reservationShouldBeRejected()
+    {
+        $this->trainDataProvider->shouldNotReceive('markSeatsAsReservedFromList');
+
+        Assert::assertEquals($this->trainId, $this->reservationConfirmation->getTrainId());
+        Assert::assertEquals(BookingReference::empty(), $this->reservationConfirmation->getBookingReference());
+        Assert::assertEquals([], $this->reservationConfirmation->getReservedSeats());
     }
 }
