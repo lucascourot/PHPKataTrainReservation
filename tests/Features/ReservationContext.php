@@ -137,9 +137,17 @@ class ReservationContext implements Context
         $coaches = [];
 
         foreach ($seats as $seat) {
-            $coaches[$seat['coach']][] = empty($seat['reserved'])
-                ? new AvailableSeat($seat['seat_number'].$seat['coach'])
-                : new ReservedSeat($seat['seat_number'].$seat['coach'], new BookingReference('abcde'));
+            $total = (int) $seat['total'];
+            $reserved = (int) $seat['reserved'];
+            $seatNumber = 1;
+
+            while ($seatNumber <= $total) {
+                while ($reserved-- > 0) {
+                    $coaches[$seat['coach']][] = new ReservedSeat($seatNumber++.$seat['coach'], new BookingReference('abcde'));
+                }
+
+                $coaches[$seat['coach']][] = new AvailableSeat($seatNumber++.$seat['coach']);
+            }
         }
 
         foreach ($coaches as $coach) {
