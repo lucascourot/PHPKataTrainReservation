@@ -87,29 +87,6 @@ class ReservationContext implements Context
     }
 
     /**
-     * @Given the train with 10 seats is empty
-     */
-    public function theTrainWith10SeatsIsEmpty()
-    {
-        $trainTopology = new TrainTopology([
-            new Coach([
-                new AvailableSeat('A1'),
-                new AvailableSeat('A2'),
-                new AvailableSeat('A3'),
-                new AvailableSeat('A4'),
-                new AvailableSeat('A5'),
-                new AvailableSeat('A6'),
-                new AvailableSeat('A7'),
-                new AvailableSeat('A8'),
-                new AvailableSeat('A9'),
-                new AvailableSeat('A10'),
-            ]),
-        ]);
-
-        $this->trainDataProvider->shouldReceive('fetchTrainTopology')->withArgs([$this->trainId])->andReturn($trainTopology);
-    }
-
-    /**
      * @When I reserve :numberOfSeats seat(s)
      */
     public function iReserveSeats(int $numberOfSeats)
@@ -130,7 +107,7 @@ class ReservationContext implements Context
         $seats = [];
 
         foreach ($table as $row) {
-            $seats[] = new ReservedSeat($row['coach'].$row['seat_number'], $this->bookingReference);
+            $seats[] = new ReservedSeat($row['seat_number'].$row['coach'], $this->bookingReference);
         }
 
         $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
