@@ -82,3 +82,19 @@ Feature: Reserve seats
       | coach | seat_number |
       | B     | 6           |
       | B     | 7           |
+
+  Scenario: Should reserve seats in different coaches for the same reservation if no alternative
+    Given train topology below:
+      | coach | total | reserved |
+      | A     | 10    | 5        |
+      | B     | 10    | 5        |
+      | C     | 10    | 5        |
+    When I reserve 6 seats
+    Then seats below should be marked as reserved:
+      | coach | seat_number |
+      | A     | 6           |
+      | A     | 7           |
+      | A     | 8           |
+      | A     | 9           |
+      | A     | 10          |
+      | B     | 6           |
