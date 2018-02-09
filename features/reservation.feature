@@ -71,3 +71,14 @@ Feature: Reserve seats
       | C     | 7           |
       | C     | 8           |
       | C     | 9           |
+
+  Scenario: Should reserve seats in the same coach for the same reservation
+    Given train topology below:
+      | coach | total | reserved |
+      | A     | 10    | 6        |
+      | B     | 10    | 5        |
+    When I reserve 2 seats
+    Then seats below should be marked as reserved:
+      | coach | seat_number |
+      | B     | 6           |
+      | B     | 7           |
