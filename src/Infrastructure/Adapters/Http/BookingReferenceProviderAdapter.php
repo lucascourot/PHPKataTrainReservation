@@ -7,9 +7,6 @@ use GuzzleHttp\Psr7\Request;
 use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\BookingReferenceProvider;
 
-/**
- * @Adapter
- */
 final class BookingReferenceProviderAdapter implements BookingReferenceProvider
 {
     /**

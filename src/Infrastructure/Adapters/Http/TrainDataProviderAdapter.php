@@ -13,9 +13,6 @@ use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
-/**
- * @Adapter
- */
 final class TrainDataProviderAdapter implements TrainDataProvider
 {
     /**

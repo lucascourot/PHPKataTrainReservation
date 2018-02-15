@@ -11,9 +11,6 @@ use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use Zend\Diactoros\Response\JsonResponse;
 
-/**
- * @Adapter
- */
 class TicketOfficeAdapter
 {
     /**

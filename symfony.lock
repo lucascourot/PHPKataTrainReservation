@@ -1,0 +1,80 @@
+{
+    "doctrine/cache": {
+        "version": "v1.7.1"
+    },
+    "doctrine/collections": {
+        "version": "v1.5.0"
+    },
+    "doctrine/common": {
+        "version": "v2.8.1"
+    },
+    "doctrine/inflector": {
+        "version": "v1.3.0"
+    },
+    "psr/cache": {
+        "version": "1.0.1"
+    },
+    "psr/simple-cache": {
+        "version": "1.0.0"
+    },
+    "sensio/framework-extra-bundle": {
+        "version": "4.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.0",
+            "ref": "aaddfdf43cdecd4cf91f992052d76c2cadc04543"
+        }
+    },
+    "symfony/cache": {
+        "version": "v3.4.4"
+    },
+    "symfony/class-loader": {
+        "version": "v3.4.4"
+    },
+    "symfony/dependency-injection": {
+        "version": "v3.4.4"
+    },
+    "symfony/dotenv": {
+        "version": "v3.4.4"
+    },
+    "symfony/flex": {
+        "version": "1.0",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "1.0",
+            "ref": "cc1afd81841db36fbef982fe56b48ade6716fac4"
+        }
+    },
+    "symfony/framework-bundle": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "09357a9c75f41be3bdbf7726453ad8399e8c4ee4"
+        }
+    },
+    "symfony/http-foundation": {
+        "version": "v3.4.4"
+    },
+    "symfony/http-kernel": {
+        "version": "v3.4.4"
+    },
+    "symfony/polyfill-apcu": {
+        "version": "v1.7.0"
+    },
+    "symfony/psr-http-message-bridge": {
+        "version": "v1.0.2"
+    },
+    "symfony/routing": {
+        "version": "3.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "3.3",
+            "ref": "a249484db698d1a847a30291c8f732414ac47e25"
+        }
+    }
+}
