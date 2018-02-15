@@ -4,6 +4,6 @@ index:
     methods: [GET]
 
 reserve_seats:
-    path: /
+    path: /reserve
     controller: 'TrainReservation\Infrastructure\Adapters\Http\TicketOfficeAdapter::reserveSeats'
     methods: [POST]
