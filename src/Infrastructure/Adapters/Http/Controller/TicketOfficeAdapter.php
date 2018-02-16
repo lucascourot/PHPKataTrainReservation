@@ -1,6 +1,6 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Adapters\Http;
+namespace TrainReservation\Infrastructure\Adapters\Http\Controller;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
