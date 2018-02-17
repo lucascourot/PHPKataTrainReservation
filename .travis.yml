@@ -24,7 +24,6 @@ script:
     - make mutation_test
     - make check_security
     - make qa
-    - "curl -X POST http://localhost:8083/reserve -H 'cache-control: no-cache' -H 'content-type: application/x-www-form-urlencoded' -d 'train_id=express_2000&seat_count=2'"
     - make guiding_test
 
 after_script:
