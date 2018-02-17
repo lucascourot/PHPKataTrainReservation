@@ -1,15 +1,15 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Adapters\Http\Controller;
+namespace TrainReservation\Infrastructure\Http\Controller;
 
 use Zend\Diactoros\Response\JsonResponse;
 
-class Home
+class Status
 {
     public function ok()
     {
         return new JsonResponse([
-            'status' => 'working',
+            'status' => 'ok',
         ]);
     }
 }

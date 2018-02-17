@@ -1,9 +1,8 @@
-index:
-    path: /
-    controller: 'TrainReservation\Infrastructure\Adapters\Http\Controller\Home::ok'
-    methods: [GET]
-
 reserve_seats:
     path: /reserve
-    controller: 'TrainReservation\Infrastructure\Adapters\Http\Controller\TicketOfficeAdapter::reserveSeats'
+    controller: 'TrainReservation\Infrastructure\Http\Controller\TicketOfficeAdapter::reserveSeats'
     methods: [POST]
+
+status:
+    path: /
+    controller: 'TrainReservation\Infrastructure\Http\Controller\Status::ok'

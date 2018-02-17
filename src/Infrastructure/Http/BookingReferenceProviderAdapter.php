@@ -1,6 +1,6 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Adapters\Http;
+namespace TrainReservation\Infrastructure\Http;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
