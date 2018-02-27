@@ -1,8 +1,8 @@
-reserve_seats:
+make_reservation:
     path: /reserve
-    controller: 'TrainReservation\Infrastructure\Http\Controller\TicketOfficeAdapter::reserveSeats'
+    controller: 'TrainReservation\Infrastructure\Http\PrimaryAdapters\MakeReservation'
     methods: [POST]
 
 status:
     path: /
-    controller: 'TrainReservation\Infrastructure\Http\Controller\Status::ok'
+    controller: 'TrainReservation\Infrastructure\Http\PrimaryAdapters\HealthCheck'

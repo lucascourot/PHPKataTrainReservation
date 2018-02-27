@@ -1,12 +1,12 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Http\Controller;
+namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
 
 use Zend\Diactoros\Response\JsonResponse;
 
-class Status
+class HealthCheck
 {
-    public function ok()
+    public function __invoke()
     {
         return new JsonResponse([
             'status' => 'ok',

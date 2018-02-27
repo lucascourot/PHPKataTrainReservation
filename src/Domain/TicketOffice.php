@@ -2,19 +2,19 @@
 
 namespace TrainReservation\Domain;
 
-class TicketOffice
+final class TicketOffice implements MakesReservation
 {
     /**
-     * @var BookingReferenceProvider
+     * @var ProvidesBookingReference
      */
     private $bookingReferenceService;
 
     /**
-     * @var TrainDataProvider
+     * @var ProvidesTrainData
      */
     private $trainDataProvider;
 
-    public function __construct(BookingReferenceProvider $bookingReferenceService, TrainDataProvider $trainDataProvider)
+    public function __construct(ProvidesBookingReference $bookingReferenceService, ProvidesTrainData $trainDataProvider)
     {
         $this->bookingReferenceService = $bookingReferenceService;
         $this->trainDataProvider = $trainDataProvider;

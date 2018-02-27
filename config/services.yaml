@@ -19,8 +19,8 @@ services:
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
-    TrainReservation\Infrastructure\Http\Controller\:
-        resource: '../src/Infrastructure/Http/Controller'
+    TrainReservation\Infrastructure\Http\PrimaryAdapters\:
+        resource: '../src/Infrastructure/Http/PrimaryAdapters'
         public: true
 
     # add more service definitions when explicit configuration is needed

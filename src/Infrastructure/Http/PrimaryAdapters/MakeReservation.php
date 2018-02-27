@@ -1,42 +1,32 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Http\Controller;
+namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TrainReservation\Domain\BookingReferenceProvider;
+use TrainReservation\Domain\MakesReservation;
 use TrainReservation\Domain\ReservationRequest;
-use TrainReservation\Domain\TicketOffice;
-use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use Zend\Diactoros\Response\JsonResponse;
 
-class TicketOfficeAdapter
+class MakeReservation
 {
     /**
-     * @var BookingReferenceProvider
+     * @var MakesReservation
      */
-    private $bookingReferenceService;
+    private $makesReservation;
 
-    /**
-     * @var TrainDataProvider
-     */
-    private $trainDataProvider;
-
-    public function __construct(BookingReferenceProvider $bookingReferenceService, TrainDataProvider $trainDataProvider)
+    public function __construct(MakesReservation $makesReservation)
     {
-        $this->bookingReferenceService = $bookingReferenceService;
-        $this->trainDataProvider = $trainDataProvider;
+        $this->makesReservation = $makesReservation;
     }
 
     /**
      * Http controller to reserve seats
      */
-    public function reserveSeats(ServerRequestInterface $request): ResponseInterface
+    public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $ticketOffice = new TicketOffice($this->bookingReferenceService, $this->trainDataProvider);
-
-        $confirmation = $ticketOffice->makeReservation(new ReservationRequest(
+        $confirmation = $this->makesReservation->makeReservation(new ReservationRequest(
             new TrainId($request->getParsedBody()['train_id']),
             $request->getParsedBody()['seat_count']
         ));
