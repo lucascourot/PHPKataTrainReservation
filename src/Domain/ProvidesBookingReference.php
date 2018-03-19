@@ -2,7 +2,7 @@
 
 namespace TrainReservation\Domain;
 
-interface BookingReferenceProvider
+interface ProvidesBookingReference
 {
     public function fetchNewBookingReference(): BookingReference;
 }

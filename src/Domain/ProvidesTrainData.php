@@ -2,7 +2,7 @@
 
 namespace TrainReservation\Domain;
 
-interface TrainDataProvider
+interface ProvidesTrainData
 {
     public function fetchTrainTopology(TrainId $trainId): TrainTopology;
 

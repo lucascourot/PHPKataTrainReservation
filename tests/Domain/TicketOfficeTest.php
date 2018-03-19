@@ -5,13 +5,13 @@ namespace TrainReservationTest\Domain;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use TrainReservation\Domain\BookingReference;
-use TrainReservation\Domain\BookingReferenceProvider;
+use TrainReservation\Domain\ProvidesBookingReference;
 use TrainReservation\Domain\Coach;
 use TrainReservation\Domain\ReservationRequest;
 use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\ReservedSeat;
 use TrainReservation\Domain\TicketOffice;
-use TrainReservation\Domain\TrainDataProvider;
+use TrainReservation\Domain\ProvidesTrainData;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
@@ -28,12 +28,12 @@ class TicketOfficeTest extends TestCase
     private $bookingReference;
 
     /**
-     * @var BookingReferenceProvider
+     * @var ProvidesBookingReference
      */
     private $bookingReferenceProvider;
 
     /**
-     * @var TrainDataProvider
+     * @var ProvidesTrainData
      */
     private $trainDataProvider;
 
@@ -42,10 +42,10 @@ class TicketOfficeTest extends TestCase
         $this->trainId = new TrainId('express_2000');
         $this->bookingReference = new BookingReference('75bcd15');
 
-        $this->bookingReferenceProvider = $this->prophesize(BookingReferenceProvider::class);
+        $this->bookingReferenceProvider = $this->prophesize(ProvidesBookingReference::class);
         $this->bookingReferenceProvider->fetchNewBookingReference()->willReturn($this->bookingReference);
 
-        $this->trainDataProvider = $this->prophesize(TrainDataProvider::class);
+        $this->trainDataProvider = $this->prophesize(ProvidesTrainData::class);
     }
 
     public function testShouldReserveSeatsWhenTrainIsEmpty()

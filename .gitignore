@@ -1,5 +1,20 @@
-build
-bin
-vendor
+/build
+/bin
+/.php_cs.cache
+/_services/__pycache__
+
+###> symfony/framework-bundle ###
+.env
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> friendsofphp/php-cs-fixer ###
+.php_cs
 .php_cs.cache
-_services/__pycache__
+###< friendsofphp/php-cs-fixer ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+###< phpunit/phpunit ###

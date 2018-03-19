@@ -1,16 +1,13 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Adapters\Http;
+namespace TrainReservation\Infrastructure\Http\SecondaryAdapters;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
 use TrainReservation\Domain\BookingReference;
-use TrainReservation\Domain\BookingReferenceProvider;
+use TrainReservation\Domain\ProvidesBookingReference;
 
-/**
- * @Adapter
- */
-final class BookingReferenceProviderAdapter implements BookingReferenceProvider
+final class BookingReferenceProvider implements ProvidesBookingReference
 {
     /**
      * @var ClientInterface

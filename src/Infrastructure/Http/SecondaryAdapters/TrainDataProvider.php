@@ -1,6 +1,6 @@
 <?php
 
-namespace TrainReservation\Infrastructure\Adapters\Http;
+namespace TrainReservation\Infrastructure\Http\SecondaryAdapters;
 
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Request;
@@ -9,14 +9,11 @@ use TrainReservation\Domain\BookingReference;
 use TrainReservation\Domain\Coach;
 use TrainReservation\Domain\ReservedSeat;
 use TrainReservation\Domain\Seat;
-use TrainReservation\Domain\TrainDataProvider;
+use TrainReservation\Domain\ProvidesTrainData;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
-/**
- * @Adapter
- */
-final class TrainDataProviderAdapter implements TrainDataProvider
+final class TrainDataProvider implements ProvidesTrainData
 {
     /**
      * @var ClientInterface
