@@ -8,13 +8,13 @@ use Mockery;
 use PHPUnit\Framework\Assert;
 use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\BookingReference;
-use TrainReservation\Domain\BookingReferenceProvider;
 use TrainReservation\Domain\Coach;
+use TrainReservation\Domain\ProvidesBookingReference;
+use TrainReservation\Domain\ProvidesTrainData;
 use TrainReservation\Domain\ReservationConfirmation;
 use TrainReservation\Domain\ReservationRequest;
 use TrainReservation\Domain\ReservedSeat;
 use TrainReservation\Domain\TicketOffice;
-use TrainReservation\Domain\TrainDataProvider;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
@@ -34,14 +34,14 @@ class ReservationContext implements Context
     private $bookingReference;
 
     /**
-     * @var BookingReferenceProvider
+     * @var ProvidesBookingReference
      */
-    private $bookingReferenceProvider;
+    private $providesBookingReference;
 
     /**
-     * @var TrainDataProvider
+     * @var ProvidesTrainData
      */
-    private $trainDataProvider;
+    private $providesTrainData;
 
     /**
      * @var ReservationConfirmation
@@ -62,8 +62,8 @@ class ReservationContext implements Context
      */
     public function __construct()
     {
-        $this->bookingReferenceProvider = Mockery::mock(BookingReferenceProvider::class);
-        $this->trainDataProvider = Mockery::spy(TrainDataProvider::class);
+        $this->providesBookingReference = Mockery::mock(ProvidesBookingReference::class);
+        $this->providesTrainData = Mockery::spy(ProvidesTrainData::class);
     }
 
     /**
@@ -81,7 +81,7 @@ class ReservationContext implements Context
     {
         $this->bookingReference = new BookingReference($bookingReference);
 
-        $this->bookingReferenceProvider->allows([
+        $this->providesBookingReference->allows([
             'fetchNewBookingReference' => $this->bookingReference,
         ]);
     }
@@ -92,7 +92,7 @@ class ReservationContext implements Context
     public function iReserveSeats(int $numberOfSeats)
     {
         try {
-            $ticketOffice = new TicketOffice($this->bookingReferenceProvider, $this->trainDataProvider);
+            $ticketOffice = new TicketOffice($this->providesBookingReference, $this->providesTrainData);
             $this->reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, $numberOfSeats));
         } catch (\Exception $exception) {
             $this->reservationException = $exception;
@@ -110,7 +110,7 @@ class ReservationContext implements Context
             $seats[] = new ReservedSeat($row['seat_number'].$row['coach'], $this->bookingReference);
         }
 
-        $this->trainDataProvider->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
+        $this->providesTrainData->shouldHaveReceived('markSeatsAsReservedFromList', [$this->trainId, $seats]);
         Assert::assertEmpty($this->reservationException);
 
         Assert::assertEquals($this->trainId, $this->reservationConfirmation->getTrainId());
@@ -158,7 +158,7 @@ class ReservationContext implements Context
 
         $trainTopology = new TrainTopology($topology);
 
-        $this->trainDataProvider->shouldReceive('fetchTrainTopology')->withArgs([$this->trainId])->andReturn($trainTopology);
+        $this->providesTrainData->shouldReceive('fetchTrainTopology')->withArgs([$this->trainId])->andReturn($trainTopology);
     }
 
     /**
@@ -166,7 +166,7 @@ class ReservationContext implements Context
      */
     public function reservationShouldBeRejected()
     {
-        $this->trainDataProvider->shouldNotReceive('markSeatsAsReservedFromList');
+        $this->providesTrainData->shouldNotReceive('markSeatsAsReservedFromList');
 
         Assert::assertEquals($this->trainId, $this->reservationConfirmation->getTrainId());
         Assert::assertEquals(BookingReference::empty(), $this->reservationConfirmation->getBookingReference());
