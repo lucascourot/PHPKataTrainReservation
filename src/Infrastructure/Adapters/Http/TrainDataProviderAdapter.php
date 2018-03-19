@@ -51,7 +51,7 @@ final class TrainDataProviderAdapter implements TrainDataProvider
             $seatsInCoach = array_values($coach);
 
             uasort($seatsInCoach, function (Seat $seat1, Seat $seat2) {
-                return $seat1->getReference() <=> $seat2->getReference();
+                return ((int) $seat1->getReference()) <=> ((int) $seat2->getReference());
             });
 
             $topology[] = new Coach($seatsInCoach);

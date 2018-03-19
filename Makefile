@@ -27,6 +27,11 @@ test: ## Run unit tests
 	@test -f bin/phpunit || echo "cannot run unit tests (needs phpunit/phpunit)"
 	php bin/phpunit --testdox --coverage-text --coverage-clover ./build/logs/clover.xml --whitelist=src/Domain
 
+.PHONY: bdd
+bdd: ## Run BDD tests
+	@test -f bin/behat || echo "cannot run bdd tests (needs behat/behat)"
+	php bin/behat
+
 .PHONY: mutation_test
 mutation_test: ## Run mutation tests
 	@test -f bin/infection || echo "cannot run unit tests (needs infection/infection)"

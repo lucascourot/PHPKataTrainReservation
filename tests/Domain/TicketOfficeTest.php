@@ -109,12 +109,7 @@ class TicketOfficeTest extends TestCase
 
         // When
         $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 0));
-
-        // Then
-        $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
-        $this->assertEmpty($reservationConfirmation->getBookingReference()->getReference());
-        $this->assertEmpty($reservationConfirmation->getReservedSeats());
+        $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 0));
     }
 
     public function testShouldNotReserveSeatsWhenTrainReachedOverallCapacityOf70percent()
