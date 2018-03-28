@@ -1,5 +1,6 @@
 /build
-/bin
+/bin/*
+!/bin/console
 /.php_cs.cache
 /_services/__pycache__
 

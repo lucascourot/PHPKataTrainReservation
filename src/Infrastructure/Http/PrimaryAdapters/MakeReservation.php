@@ -28,7 +28,7 @@ class MakeReservation
     {
         $confirmation = $this->makesReservation->makeReservation(new ReservationRequest(
             new TrainId($request->getParsedBody()['train_id']),
-            $request->getParsedBody()['seat_count']
+            (int) $request->getParsedBody()['seat_count']
         ));
 
         $reservedSeatsPresentation = [];

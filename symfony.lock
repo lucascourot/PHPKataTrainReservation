@@ -212,7 +212,7 @@
             "repo": "github.com/symfony/recipes",
             "branch": "master",
             "version": "3.3",
-            "ref": "c646e4b71af082e94b5014daca36ef6812bad076"
+            "ref": "e3868d2f4a5104f19f844fe551099a00c6562527"
         }
     },
     "symfony/debug": {
