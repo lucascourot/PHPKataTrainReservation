@@ -1,6 +1,6 @@
 <?php
 
-namespace TrainReservation;
+namespace TrainReservation\Infrastructure;
 
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;
 use Symfony\Component\Config\Loader\LoaderInterface;

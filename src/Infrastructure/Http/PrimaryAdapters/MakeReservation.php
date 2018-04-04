@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
 
 use Psr\Http\Message\ResponseInterface;
@@ -26,10 +28,15 @@ class MakeReservation
      */
     public function __invoke(ServerRequestInterface $request): ResponseInterface
     {
-        $confirmation = $this->makesReservation->makeReservation(new ReservationRequest(
-            new TrainId($request->getParsedBody()['train_id']),
-            (int) $request->getParsedBody()['seat_count']
-        ));
+        $requestSeatCount = $request->getParsedBody()['seat_count'];
+        if (!is_numeric($requestSeatCount)) {
+            throw new \InvalidArgumentException('seat_count should be a numeric value.');
+        }
+        $requestTrainId = $request->getParsedBody()['train_id'];
+
+        $confirmation = $this->makesReservation->makeReservation(
+            new ReservationRequest(new TrainId($requestTrainId), (int) $requestSeatCount)
+        );
 
         $reservedSeatsPresentation = [];
         foreach ($confirmation->getReservedSeats() as $reservedSeat) {

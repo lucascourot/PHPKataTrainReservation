@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TrainReservation\Infrastructure\Http\SecondaryAdapters;
 
 use GuzzleHttp\ClientInterface;
@@ -27,6 +29,8 @@ final class TrainDataProvider implements ProvidesTrainData
 
     /**
      * Fetches and parses the json train topology provided by the train data provider
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function fetchTrainTopology(TrainId $trainId): TrainTopology
     {
@@ -59,6 +63,8 @@ final class TrainDataProvider implements ProvidesTrainData
 
     /**
      * Sends an http request to the train data service to reserve chosen seats
+     *
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function markSeatsAsReservedFromList(TrainId $trainId, array $reservedSeats): void
     {

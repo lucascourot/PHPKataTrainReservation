@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
 
 use Zend\Diactoros\Response\JsonResponse;

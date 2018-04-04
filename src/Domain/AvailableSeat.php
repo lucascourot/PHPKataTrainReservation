@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace TrainReservation\Domain;
 
 final class AvailableSeat implements Seat
