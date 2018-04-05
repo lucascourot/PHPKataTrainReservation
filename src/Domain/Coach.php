@@ -6,7 +6,7 @@ namespace TrainReservation\Domain;
 
 final class Coach
 {
-    private const IDEAL_CAPACITY_PERCENTAGE = 70;
+    private const IDEAL_CAPACITY_PERCENTAGE = 0.70;
 
     /**
      * @var Seat[]
@@ -43,7 +43,7 @@ final class Coach
     {
         $reservedSeats = $this->getNumberOfAlreadyReservedSeats() + $numberOfSeatsToReserve;
 
-        return $reservedSeats > count($this->getSeats()) * self::IDEAL_CAPACITY_PERCENTAGE / 100;
+        return $reservedSeats > count($this->getSeats()) * self::IDEAL_CAPACITY_PERCENTAGE;
     }
 
     /**

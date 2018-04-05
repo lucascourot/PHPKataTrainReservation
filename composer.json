@@ -16,7 +16,7 @@
   "require-dev": {
     "behat/behat": "^3.4",
     "friendsofphp/php-cs-fixer": "^2.8",
-    "infection/infection": "^0.7.0",
+    "infection/infection": "^0.8.1",
     "mockery/mockery": "^1.0",
     "php-coveralls/php-coveralls": "^2.0",
     "phpunit/phpunit": "^6.1",

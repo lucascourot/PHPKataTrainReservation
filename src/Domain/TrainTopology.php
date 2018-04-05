@@ -6,7 +6,7 @@ namespace TrainReservation\Domain;
 
 final class TrainTopology
 {
-    private const OVERALL_TRAIN_CAPACITY_PERCENTAGE = 70;
+    private const OVERALL_TRAIN_CAPACITY_PERCENTAGE = 0.70;
 
     /**
      * @var Coach[]
@@ -67,7 +67,7 @@ final class TrainTopology
     {
         $reservedSeats = $this->overallNumberOfAlreadyReservedSeats + $numberOfSeatsToReserve;
 
-        return $reservedSeats > $this->overallNumberOfAllSeats * self::OVERALL_TRAIN_CAPACITY_PERCENTAGE / 100;
+        return $reservedSeats > $this->overallNumberOfAllSeats * self::OVERALL_TRAIN_CAPACITY_PERCENTAGE;
     }
 
     private function findACoachWithIdealCapacityFor(int $numberOfSeatsToReserve): ?Coach

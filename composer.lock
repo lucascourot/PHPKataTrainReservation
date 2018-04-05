@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "e87e82eb8b73a8bca871ca8feabf1461",
+    "content-hash": "0e2c0876c46789a6c6df41d7ef1f0691",
     "packages": [
         {
             "name": "doctrine/annotations",
@@ -2520,16 +2520,16 @@
         },
         {
             "name": "infection/infection",
-            "version": "0.7.1",
+            "version": "0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/infection/infection.git",
-                "reference": "44751a5835ec44e7f2754ddcf21a2012f8219c23"
+                "reference": "0f8109caa95552c3661c6847b8ea2a8a362e3103"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/infection/infection/zipball/44751a5835ec44e7f2754ddcf21a2012f8219c23",
-                "reference": "44751a5835ec44e7f2754ddcf21a2012f8219c23",
+                "url": "https://api.github.com/repos/infection/infection/zipball/0f8109caa95552c3661c6847b8ea2a8a362e3103",
+                "reference": "0f8109caa95552c3661c6847b8ea2a8a362e3103",
                 "shasum": ""
             },
             "require": {
@@ -2539,6 +2539,7 @@
                 "pimple/pimple": "^3.2",
                 "sebastian/diff": "^1.4 || ^2.0 || ^3.0",
                 "symfony/console": "^3.2 || ^4.0",
+                "symfony/filesystem": "^3.2 || ^4.0",
                 "symfony/finder": "^3.2 || ^4.0",
                 "symfony/process": "^3.2 || ^4.0",
                 "symfony/yaml": "^3.2 || ^4.0"
@@ -2579,7 +2580,7 @@
                 "testing",
                 "unit testing"
             ],
-            "time": "2018-02-02T11:25:42+00:00"
+            "time": "2018-03-01T06:23:00+00:00"
         },
         {
             "name": "mockery/mockery",
