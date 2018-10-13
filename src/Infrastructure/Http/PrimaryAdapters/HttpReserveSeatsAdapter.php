@@ -6,27 +6,25 @@ namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use TrainReservation\Domain\MakesReservation;
-use TrainReservation\Domain\ReservationRequest;
-use TrainReservation\Domain\TrainId;
+use TrainReservation\Domain\ReserveSeats;
 use Zend\Diactoros\Response\JsonResponse;
 
-class MakeReservation
+class HttpReserveSeatsAdapter
 {
     /**
-     * @var MakesReservation
+     * @var ReserveSeats
      */
-    private $makesReservation;
+    private $hexagon;
 
-    public function __construct(MakesReservation $makesReservation)
+    public function __construct(ReserveSeats $reserveSeatsApi)
     {
-        $this->makesReservation = $makesReservation;
+        $this->hexagon = $reserveSeatsApi;
     }
 
     /**
      * Http controller to reserve seats
      */
-    public function __invoke(ServerRequestInterface $request): ResponseInterface
+    public function httpReserveSeats(ServerRequestInterface $request): ResponseInterface
     {
         $requestSeatCount = $request->getParsedBody()['seat_count'];
         if (!is_numeric($requestSeatCount)) {
@@ -34,9 +32,7 @@ class MakeReservation
         }
         $requestTrainId = $request->getParsedBody()['train_id'];
 
-        $confirmation = $this->makesReservation->makeReservation(
-            new ReservationRequest(new TrainId($requestTrainId), (int) $requestSeatCount)
-        );
+        $confirmation = $this->hexagon->reserveSeats($requestTrainId, (int) $requestSeatCount);
 
         $reservedSeatsPresentation = [];
         foreach ($confirmation->getReservedSeats() as $reservedSeat) {

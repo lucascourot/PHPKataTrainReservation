@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace TrainReservation\Domain;
 
-final class TicketOffice implements MakesReservation
+final class TicketOffice
 {
     /**
      * @var ProvidesBookingReference
