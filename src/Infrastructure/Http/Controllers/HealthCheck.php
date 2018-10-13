@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TrainReservation\Infrastructure\Http\PrimaryAdapters;
+namespace TrainReservation\Infrastructure\Http\Controllers;
 
 use Zend\Diactoros\Response\JsonResponse;
 
