@@ -5,17 +5,16 @@ namespace TrainReservationTest\Domain;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use TrainReservation\Domain\BookingReference;
+use TrainReservation\Domain\Hexagon;
 use TrainReservation\Domain\ProvidesBookingReference;
 use TrainReservation\Domain\Coach;
-use TrainReservation\Domain\ReservationRequest;
 use TrainReservation\Domain\AvailableSeat;
 use TrainReservation\Domain\ReservedSeat;
-use TrainReservation\Domain\TicketOffice;
 use TrainReservation\Domain\ProvidesTrainData;
 use TrainReservation\Domain\TrainId;
 use TrainReservation\Domain\TrainTopology;
 
-class TicketOfficeTest extends TestCase
+class HexagonTest extends TestCase
 {
     /**
      * @var TrainId
@@ -77,8 +76,8 @@ class TicketOfficeTest extends TestCase
         )->shouldBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 3));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 3);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -108,8 +107,8 @@ class TicketOfficeTest extends TestCase
         $this->expectException(\LogicException::class);
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 0));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $hexagon->reserveSeats($this->trainId->getId(), 0);
     }
 
     public function testShouldNotReserveSeatsWhenTrainReachedOverallCapacityOf70percent()
@@ -134,8 +133,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 1));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 1);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -165,8 +164,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldNotBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 8));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 8);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -208,8 +207,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 1));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 1);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -292,8 +291,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 4));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 4);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -343,8 +342,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 2));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 2);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());
@@ -404,8 +403,8 @@ class TicketOfficeTest extends TestCase
         $this->trainDataProvider->markSeatsAsReservedFromList(Argument::any(), Argument::any())->shouldBeCalled();
 
         // When
-        $ticketOffice = new TicketOffice($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
-        $reservationConfirmation = $ticketOffice->makeReservation(new ReservationRequest($this->trainId, 6));
+        $hexagon = new Hexagon($this->bookingReferenceProvider->reveal(), $this->trainDataProvider->reveal());
+        $reservationConfirmation = $hexagon->reserveSeats($this->trainId->getId(), 6);
 
         // Then
         $this->assertEquals($this->trainId, $reservationConfirmation->getTrainId());

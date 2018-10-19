@@ -2,15 +2,7 @@
 
 declare(strict_types=1);
 
-namespace TrainReservation;
-
-use TrainReservation\Domain\ProvidesBookingReference;
-use TrainReservation\Domain\ProvidesTrainData;
-use TrainReservation\Domain\ReservationConfirmation;
-use TrainReservation\Domain\ReservationRequest;
-use TrainReservation\Domain\ReserveSeats;
-use TrainReservation\Domain\TicketOffice;
-use TrainReservation\Domain\TrainId;
+namespace TrainReservation\Domain;
 
 final class Hexagon implements ReserveSeats
 {
